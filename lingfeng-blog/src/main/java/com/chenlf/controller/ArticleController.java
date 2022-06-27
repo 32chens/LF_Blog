@@ -1,0 +1,41 @@
+package com.chenlf.controller;
+
+import com.chenlf.entity.Article;
+import com.chenlf.service.ArticleService;
+import com.chenlf.vo.ResponseResult;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
+
+/**
+ * 
+ * @author ChenLF
+ * @date 2022/06/23 18:48
+ **/
+
+@RestController
+@RequestMapping("/article")
+public class ArticleController {
+    @Autowired
+    private ArticleService articleService;
+
+//    @GetMapping("/list")
+//    public List<Article> test(){
+//        return articleService.list();
+//    }
+
+    @GetMapping("/hotArticleList")
+    public ResponseResult hotArticleList(){
+
+        ResponseResult result =  articleService.hotArticleList();
+        return result;
+    }
+
+    @GetMapping("/articleList")
+    public ResponseResult articleList(Integer pageNum,Integer pageSize,Long categoryId){
+        return articleService.articleList(pageNum,pageSize,categoryId);
+    }
+}
