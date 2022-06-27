@@ -10,9 +10,7 @@ import com.chenlf.entity.Article;
 import com.chenlf.mapper.CategoryMapper;
 import com.chenlf.service.ArticleService;
 import com.chenlf.utils.BeanCopyUtils;
-import com.chenlf.vo.ArticleListVo;
-import com.chenlf.vo.HotArticleVo;
-import com.chenlf.vo.ResponseResult;
+import com.chenlf.vo.*;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -82,7 +80,19 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
 
 
         List<ArticleListVo> articleListVos = BeanCopyUtils.copyBeanList(records, ArticleListVo.class);
+        PageVo pageVo = new PageVo(articleListVos,page.getTotal());
+        return ResponseResult.okResult(pageVo);
+    }
 
-        return ResponseResult.okResult(articleListVos);
+    @Override
+    public ResponseResult getArticleDetail(Long id) {
+        //①要在文章详情中展示其分类名
+        Article article = articleMapper.selectById(id);
+        ArticleDetailVo articleDetailVo = BeanCopyUtils.copyBean(article, ArticleDetailVo.class);
+        Category category = categoryMapper.selectById(article.getCategoryId());
+        if (category != null){
+            articleDetailVo.setCategoryName(category.getName());
+        }
+        return ResponseResult.okResult(articleDetailVo);
     }
 }
