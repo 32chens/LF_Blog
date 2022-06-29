@@ -14,6 +14,7 @@ import com.chenlf.vo.params.LoginParam;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -56,5 +57,14 @@ public class BlogLoginServiceImpl implements BlogLoginService {
         UserInfoVo userInfoVo = BeanCopyUtils.copyBean(principal.getUser(), UserInfoVo.class);
         BlogUserLoginVo vo = new BlogUserLoginVo(jwt,userInfoVo);
         return ResponseResult.okResult(vo);
+    }
+
+    @Override
+    public ResponseResult logout() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        LoginUserBo principal = (LoginUserBo) authentication.getPrincipal();
+        String userId = principal.getUser().getId().toString();
+        redisCache.deleteObject("Token_"+userId);
+        return ResponseResult.okResult();
     }
 }

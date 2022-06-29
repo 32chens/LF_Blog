@@ -23,4 +23,8 @@ public class SystemConstants
     public static final String  LINK_STATUS_NORMAL = "0";
 
 
+    /**
+     * 是否是管理员
+     */
+    public static final String  USER_TYPE = "1";
 }

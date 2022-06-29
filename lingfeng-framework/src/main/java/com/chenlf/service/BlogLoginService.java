@@ -6,4 +6,6 @@ import com.chenlf.vo.params.LoginParam;
 
 public interface BlogLoginService {
     ResponseResult login(LoginParam user);
+
+    ResponseResult logout();
 }

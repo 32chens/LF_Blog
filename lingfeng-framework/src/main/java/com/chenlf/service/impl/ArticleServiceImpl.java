@@ -68,14 +68,11 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
         page(page, queryWrapper);
         List<Article> records = page.getRecords();
 
-        List<Category> categories = categoryMapper.selectList(null);
-        for (Article record : records) {
-//            String categoryName = 
-            Optional<Category> first = categories.stream()
-                    .filter(category -> categoryId.equals(record.getCategoryId()))
-                    .findFirst();
-            Category category = first.orElseThrow(() ->new RuntimeException("文章的分类id错误"));
-            record.setCategoryName(category.getName());
+        Category category = categoryMapper.selectById(categoryId);
+        if (category != null){
+            for (Article record : records) {
+                record.setCategoryName(category.getName());
+            }
         }
 
 
