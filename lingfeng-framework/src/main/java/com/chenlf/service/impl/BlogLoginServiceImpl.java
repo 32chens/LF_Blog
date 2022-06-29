@@ -48,9 +48,10 @@ public class BlogLoginServiceImpl implements BlogLoginService {
 
         //成功 生成jwt 放入redis
         LoginUserBo principal = (LoginUserBo) authenticate.getPrincipal();
-        String jwt = JwtUtil.createJWT(principal.getUser().getId().toString());
+        String userId = principal.getUser().getId().toString();
+        String jwt = JwtUtil.createJWT(userId);
 
-        redisCache.setCacheObject("Token_"+jwt,principal);
+        redisCache.setCacheObject("Token_"+userId,principal);
 
         UserInfoVo userInfoVo = BeanCopyUtils.copyBean(principal.getUser(), UserInfoVo.class);
         BlogUserLoginVo vo = new BlogUserLoginVo(jwt,userInfoVo);

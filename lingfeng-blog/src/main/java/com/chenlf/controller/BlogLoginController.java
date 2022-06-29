@@ -1,6 +1,8 @@
 package com.chenlf.controller;
 
 import com.chenlf.entity.User;
+import com.chenlf.enums.AppHttpCodeEnum;
+import com.chenlf.exception.SystemException;
 import com.chenlf.service.BlogLoginService;
 import com.chenlf.vo.ResponseResult;
 import com.chenlf.vo.params.LoginParam;
@@ -18,6 +20,9 @@ public class BlogLoginController {
 
     @PostMapping("/login")
     public ResponseResult login(@RequestBody LoginParam user){
+        if (user.getUserName() == null){
+            throw new SystemException(AppHttpCodeEnum.REQUIRE_USERNAME);
+        }
         return blogLoginService.login(user);
     }
 }
