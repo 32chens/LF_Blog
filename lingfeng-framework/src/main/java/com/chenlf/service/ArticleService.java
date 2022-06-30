@@ -3,6 +3,7 @@ package com.chenlf.service;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.chenlf.entity.Article;
 import com.chenlf.vo.ResponseResult;
+import com.chenlf.vo.params.PageParam;
 
 /**
  * 
@@ -21,7 +22,7 @@ public interface ArticleService extends IService<Article> {
      * 文章列表
      * @return
      */
-    ResponseResult articleList(Integer pageNum,Integer pageSize,Long categoryId);
+    ResponseResult articleList(PageParam pageParam);
 
     /**
      * 查询文章详情

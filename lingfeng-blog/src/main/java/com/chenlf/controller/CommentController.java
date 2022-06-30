@@ -3,8 +3,7 @@ package com.chenlf.controller;
 import com.chenlf.entity.Comment;
 import com.chenlf.service.CommentService;
 import com.chenlf.vo.ResponseResult;
-import com.chenlf.vo.params.CommentPageParam;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.chenlf.vo.params.PageParam;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -17,8 +16,8 @@ public class CommentController {
     private CommentService commentService;
 
     @GetMapping("/commentList")
-    public ResponseResult commentList(CommentPageParam commentPageParam){
-        return commentService.commentList(commentPageParam);
+    public ResponseResult commentList(PageParam pageParam){
+        return commentService.commentList(pageParam);
     }
 
     @PostMapping

@@ -13,9 +13,10 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class CommentPageParam {
+public class PageParam {
 
     private Long articleId;
     private Integer pageNum;
     private Integer pageSize;
+    private Long categoryId;
 }

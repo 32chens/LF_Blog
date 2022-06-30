@@ -1,7 +1,6 @@
 package com.chenlf.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.toolkit.support.SFunction;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.chenlf.constans.SystemConstants;
@@ -12,20 +11,17 @@ import com.chenlf.exception.SystemException;
 import com.chenlf.mapper.CommentMapper;
 import com.chenlf.mapper.UserMapper;
 import com.chenlf.service.CommentService;
-import com.chenlf.service.UserService;
 import com.chenlf.utils.BeanCopyUtils;
 import com.chenlf.utils.SecurityUtils;
 import com.chenlf.vo.CommentVo;
 import com.chenlf.vo.PageVo;
 import com.chenlf.vo.ResponseResult;
-import com.chenlf.vo.params.CommentPageParam;
+import com.chenlf.vo.params.PageParam;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.locks.Condition;
 import java.util.stream.Collectors;
 
 /**
@@ -41,13 +37,13 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
     public UserMapper userMapper;
 
     @Override
-    public ResponseResult commentList(CommentPageParam commentPageParam) {
+    public ResponseResult commentList(PageParam pageParam) {
         LambdaQueryWrapper<Comment> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.eq(Comment::getArticleId, commentPageParam.getArticleId());
+        queryWrapper.eq(Comment::getArticleId, pageParam.getArticleId());
         queryWrapper.eq(Comment::getRootId, SystemConstants.COMMENT_ROOT);
         queryWrapper.orderByAsc(Comment::getCreateTime,Comment::getId);
 
-        Page<Comment> commentPage = new Page<>(commentPageParam.getPageNum(), commentPageParam.getPageSize());
+        Page<Comment> commentPage = new Page<>(pageParam.getPageNum(), pageParam.getPageSize());
         page(commentPage,queryWrapper);
 
         //根评论
@@ -68,7 +64,7 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
 
         //子评论
         LambdaQueryWrapper<Comment> childWapper = new LambdaQueryWrapper<>();
-        childWapper.eq(Comment::getArticleId, commentPageParam.getArticleId());
+        childWapper.eq(Comment::getArticleId, pageParam.getArticleId());
         childWapper.ne(Comment::getRootId, SystemConstants.COMMENT_ROOT);
         List<Comment> childComments = list(childWapper);
         List<CommentVo> commentVoList = BeanCopyUtils.copyBeanList(childComments, CommentVo.class);

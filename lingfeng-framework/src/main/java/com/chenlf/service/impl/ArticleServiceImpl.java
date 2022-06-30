@@ -11,6 +11,7 @@ import com.chenlf.mapper.CategoryMapper;
 import com.chenlf.service.ArticleService;
 import com.chenlf.utils.BeanCopyUtils;
 import com.chenlf.vo.*;
+import com.chenlf.vo.params.PageParam;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -56,10 +57,15 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
     }
 
     @Override
-    public ResponseResult articleList(Integer pageNum,Integer pageSize,Long categoryId) {
+    public ResponseResult articleList(PageParam pageParam) {
 //        首页：查询所有的文章
 //​	分类页面：查询对应分类下的文章
         //①只能查询正式发布的文章 ②置顶的文章要显示在最前面
+
+        Integer pageNum = pageParam.getPageNum();
+        Integer pageSize = pageParam.getPageSize();
+        Long categoryId = pageParam.getCategoryId();
+
         Page<Article> page = new Page<>(pageNum, pageSize);
         LambdaQueryWrapper<Article> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.eq(Objects.nonNull(categoryId)&&categoryId>0, Article::getCategoryId,categoryId);
@@ -68,11 +74,10 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
         page(page, queryWrapper);
         List<Article> records = page.getRecords();
 
-        Category category = categoryMapper.selectById(categoryId);
-        if (category != null){
-            for (Article record : records) {
-                record.setCategoryName(category.getName());
-            }
+
+        for (Article record : records) {
+            Category category = categoryMapper.selectById(record.getCategoryId());
+            record.setCategoryName(category.getName());
         }
 
 

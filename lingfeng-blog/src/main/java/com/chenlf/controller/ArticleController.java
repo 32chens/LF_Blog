@@ -3,6 +3,7 @@ package com.chenlf.controller;
 import com.chenlf.entity.Article;
 import com.chenlf.service.ArticleService;
 import com.chenlf.vo.ResponseResult;
+import com.chenlf.vo.params.PageParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -36,8 +37,8 @@ public class ArticleController {
     }
 
     @GetMapping("/articleList")
-    public ResponseResult articleList(Integer pageNum,Integer pageSize,Long categoryId){
-        return articleService.articleList(pageNum,pageSize,categoryId);
+    public ResponseResult articleList(PageParam pageParam){
+        return articleService.articleList(pageParam);
     }
 
     @GetMapping("/{id}")
