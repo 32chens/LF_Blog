@@ -21,3 +21,8 @@ mybatis-plus:
       logic-not-delete-value: 0
       table-prefix: lf_
 #      id-type: auto
+
+oss:
+  accessKey: 1ltxb75nnwzFNIok8MHVI2RcZzgUJDn3qxCSSzgM
+  secretKey: UewKt0Ypx7oyLztjdfsN-jwiQ7MAbVVGArwwvkwN
+  bucket: lf-blog

@@ -1,5 +1,6 @@
 package com.chenlf.controller;
 
+import com.chenlf.constans.SystemConstants;
 import com.chenlf.entity.Comment;
 import com.chenlf.service.CommentService;
 import com.chenlf.vo.ResponseResult;
@@ -17,7 +18,12 @@ public class CommentController {
 
     @GetMapping("/commentList")
     public ResponseResult commentList(PageParam pageParam){
-        return commentService.commentList(pageParam);
+        return commentService.commentList(SystemConstants.ARTICLE_COMMENT,pageParam);
+    }
+
+    @GetMapping("/linkCommentList")
+    public ResponseResult linkCommentList(PageParam pageParam){
+        return commentService.commentList(SystemConstants.LINK_COMMENT,pageParam);
     }
 
     @PostMapping

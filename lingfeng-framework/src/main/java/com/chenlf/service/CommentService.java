@@ -7,7 +7,7 @@ import com.chenlf.vo.params.PageParam;
 
 public interface CommentService extends IService<Comment> {
 
-    ResponseResult commentList(PageParam pageParam);
+    ResponseResult commentList(String commentType, PageParam pageParam);
 
     ResponseResult addComment(Comment comment);
 }

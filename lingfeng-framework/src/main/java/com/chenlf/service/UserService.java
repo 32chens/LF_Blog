@@ -2,6 +2,7 @@ package com.chenlf.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.chenlf.entity.User;
+import com.chenlf.vo.ResponseResult;
 
 
 /**
@@ -12,5 +13,6 @@ import com.chenlf.entity.User;
  */
 public interface UserService extends IService<User> {
 
+    ResponseResult userInfo();
 }
 

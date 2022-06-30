@@ -1,5 +1,7 @@
 package com.chenlf.constans;
 
+import com.chenlf.vo.params.PageParam;
+
 public class SystemConstants
 {
     /**
@@ -32,4 +34,14 @@ public class SystemConstants
      * 根评论
      */
     public static final int COMMENT_ROOT = -1;
+
+    /**
+     * 评论类型为：文章评论
+     */
+    public static final String ARTICLE_COMMENT = "0";
+    /**
+     * 评论类型为：友联评论
+     */
+    public static final String LINK_COMMENT = "1";
+
 }

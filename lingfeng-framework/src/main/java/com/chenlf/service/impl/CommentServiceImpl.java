@@ -37,10 +37,11 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
     public UserMapper userMapper;
 
     @Override
-    public ResponseResult commentList(PageParam pageParam) {
+    public ResponseResult commentList(String commentType, PageParam pageParam) {
         LambdaQueryWrapper<Comment> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.eq(Comment::getArticleId, pageParam.getArticleId());
+        queryWrapper.eq(commentType.equals(SystemConstants.ARTICLE_COMMENT), Comment::getArticleId, pageParam.getArticleId());
         queryWrapper.eq(Comment::getRootId, SystemConstants.COMMENT_ROOT);
+        queryWrapper.eq(Comment::getType, commentType);
         queryWrapper.orderByAsc(Comment::getCreateTime,Comment::getId);
 
         Page<Comment> commentPage = new Page<>(pageParam.getPageNum(), pageParam.getPageSize());
@@ -53,8 +54,6 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
 
         List<CommentVo> rootComments = commentVos.stream()
                 .map(commentVo -> {
-//                    User toUser = userMapper.selectById(commentVo.getToCommentUserId());
-//                    commentVo.setToCommentUserName(toUser.getNickName());
                     User user = userMapper.selectById(commentVo.getCreateBy());
                     commentVo.setUsername(user.getNickName());
                     return commentVo;
