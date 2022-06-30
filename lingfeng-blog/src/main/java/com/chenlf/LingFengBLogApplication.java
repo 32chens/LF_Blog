@@ -3,6 +3,7 @@ package com.chenlf;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 
 /**
  * 
@@ -11,6 +12,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  **/
 
 @SpringBootApplication
+//@EnableConfigurationProperties(LingFengBLogApplication.class)
 public class LingFengBLogApplication {
     public static void main(String[] args) {
         SpringApplication.run(LingFengBLogApplication.class, args);

@@ -30,6 +30,11 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-configuration-processor</artifactId>
+            <optional>true</optional>
+        </dependency>
         <!--lombk-->
         <dependency>
             <groupId>org.projectlombok</groupId>
@@ -40,17 +45,6 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
-            <scope>test</scope>
-<!--            <exclusions>-->
-<!--                <exclusion>-->
-<!--                    <artifactId>asm</artifactId>-->
-<!--                    <groupId>org.ow2.asm</groupId>-->
-<!--                </exclusion>-->
-<!--                <exclusion>-->
-<!--                    <artifactId>accessors-smart</artifactId>-->
-<!--                    <groupId>net.minidev</groupId>-->
-<!--                </exclusion>-->
-<!--            </exclusions>-->
         </dependency>
         <!--SpringSecurity启动器-->
         <dependency>
