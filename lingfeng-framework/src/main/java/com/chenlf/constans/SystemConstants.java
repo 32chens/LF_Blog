@@ -27,4 +27,9 @@ public class SystemConstants
      * 是否是管理员
      */
     public static final String  USER_TYPE = "1";
+
+    /**
+     * 根评论
+     */
+    public static final int COMMENT_ROOT = -1;
 }

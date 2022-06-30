@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.support.SFunction;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.chenlf.constans.SystemConstants;
 import com.chenlf.entity.Comment;
 import com.chenlf.entity.User;
 import com.chenlf.enums.AppHttpCodeEnum;
@@ -43,18 +44,18 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
     public ResponseResult commentList(CommentPageParam commentPageParam) {
         LambdaQueryWrapper<Comment> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.eq(Comment::getArticleId, commentPageParam.getArticleId());
+        queryWrapper.eq(Comment::getRootId, SystemConstants.COMMENT_ROOT);
         queryWrapper.orderByAsc(Comment::getCreateTime,Comment::getId);
 
-//        Page<Comment> commentPage = new Page<>(commentPageParam.getPageNum(), commentPageParam.getPageSize());
-//        page(commentPage,queryWrapper);
+        Page<Comment> commentPage = new Page<>(commentPageParam.getPageNum(), commentPageParam.getPageSize());
+        page(commentPage,queryWrapper);
 
-
-//        List<Comment> records = commentPage.getRecords();
-        List<Comment> records = list(queryWrapper);
+        //根评论
+//        List<Comment> records = list(queryWrapper);
+        List<Comment> records = commentPage.getRecords();
         List<CommentVo> commentVos = BeanCopyUtils.copyBeanList(records, CommentVo.class);
 
         List<CommentVo> rootComments = commentVos.stream()
-                .filter(commentVo -> commentVo.getRootId() == -1)
                 .map(commentVo -> {
 //                    User toUser = userMapper.selectById(commentVo.getToCommentUserId());
 //                    commentVo.setToCommentUserName(toUser.getNickName());
@@ -64,8 +65,14 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
                 })
                 .collect(Collectors.toList());
 
-        List<CommentVo> childComemetns = commentVos.stream()
-                .filter(commentVo -> commentVo.getRootId() != -1)
+
+        //子评论
+        LambdaQueryWrapper<Comment> childWapper = new LambdaQueryWrapper<>();
+        childWapper.eq(Comment::getArticleId, commentPageParam.getArticleId());
+        childWapper.ne(Comment::getRootId, SystemConstants.COMMENT_ROOT);
+        List<Comment> childComments = list(childWapper);
+        List<CommentVo> commentVoList = BeanCopyUtils.copyBeanList(childComments, CommentVo.class);
+        List<CommentVo> childCommentVos = commentVoList.stream()
                 .map(commentVo -> {
                     User toUser = userMapper.selectById(commentVo.getToCommentUserId());
                     commentVo.setToCommentUserName(toUser.getNickName());
@@ -76,13 +83,14 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
                 .collect(Collectors.toList());
 
         for (CommentVo rootComment : rootComments) {
-            List<CommentVo> collect = childComemetns.stream()
+            List<CommentVo> collect = childCommentVos.stream()
                     .filter(commentVo -> commentVo.getToCommentId().equals(rootComment.getId()))
                     .collect(Collectors.toList());
             rootComment.setChildren(collect);
         }
 
-        return ResponseResult.okResult(new PageVo(rootComments, commentPageParam.getPageSize().longValue()));
+        return ResponseResult.okResult(new PageVo(rootComments, commentPage.getTotal()));
+//        return ResponseResult.okResult(new PageVo(rootComments, commentPageParam.getPageSize().longValue()));
     }
 
     @Override
