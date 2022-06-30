@@ -58,6 +58,7 @@ public class SecurityConfig {
                 .antMatchers("/logout").authenticated()
                 //个人信息接口必须登录后才能访问
                 .antMatchers("/user/userInfo").authenticated()
+//                .antMatchers("/upload").authenticated()
                 // 除上面外的所有请求全部需要鉴权认证
                 .anyRequest().permitAll();
 
